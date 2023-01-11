@@ -35,3 +35,95 @@ class UnionFind:
         return currentVertex
 
             
+class UnionFindQuickFind:
+    def __init__(self):
+        self.parentArray = []
+        self.vertices = []
+
+    def addNewVertex(self):
+        currentVertexCount = len(self.vertices)
+        self.parentArray.append(currentVertexCount)
+        self.vertices.append(currentVertexCount)
+
+    def union(self, vertexA, vertexB):
+        rootA = self.find(vertexA)
+        rootB = self.find(vertexB)
+
+        # change all previous values of rootA to rootB
+        if rootA != rootB:
+            for idx in range(len(self.parentArray)):
+                if self.parentArray[idx] == rootA:
+                    self.parentArray[idx] == rootB
+                    
+    def find(self, vertex):
+        return self.parentArray[vertex]
+
+    def connected(self, vertexA, vertexB):
+        return self.find(vertexA) == self.find(vertexB)
+
+
+class UnionFindQuickUnion:
+    def __init__(self):
+        self.roots = []
+
+    def addNewVertex(self):
+        currentVertexCount = len(self.roots)
+        self.roots.append(currentVertexCount)
+
+    def union(self, vertexA, vertexB):
+        rootA = self.find(vertexA)
+        rootB = self.find(vertexB)
+
+        if rootA != rootB:
+            self.roots[rootA] = rootB
+                    
+    def find(self, vertex):
+        currentVertex = vertex
+
+        while self.roots[currentVertex] != vertex:
+            currentVertex = self.roots[currentVertex]
+
+        return currentVertex 
+
+    def connected(self, vertexA, vertexB):
+        return self.find(vertexA) == self.find(vertexB)
+
+
+class UnionFindUnionByRank:
+    def __init__(self):
+        self.roots = []
+        self.ranks = []
+
+    def addNewVertex(self):
+        currentVertexCount = len(self.roots)
+        self.roots.append(currentVertexCount)
+        self.ranks.append(1)
+
+    def find(self, vertex):
+        currentVertex = vertex
+
+        while self.roots[currentVertex] != vertex:
+            currentVertex = self.roots[currentVertex]
+
+        return currentVertex
+
+    def union(self, vertexA, vertexB):
+        rootA = self.find(vertexA)
+        rootB = self.find(vertexB)
+
+        if rootA != rootB:
+            rankA = self.ranks[vertexA]
+            rankB = self.ranks[vertexB]
+
+            if rankA < rankB:
+                self.roots[rankA] = rankB
+            elif rankA > rankB:
+                self.roots[rankB] = rankA
+            else:
+                self.roots[rankA] = rankB
+                self.ranks[rankB] += 1
+
+    def connected(self, vertexA, vertexB):
+        return self.find(vertexA) == self.find(vertexB)
+
+
